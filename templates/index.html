@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IITB Crowdfunding</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+            body, html {
+          height: 100%;
+          /* padding-top: 64px; */
+        }
+        .parallax-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150%;
+            background-image: url('https://gratisography.com/wp-content/uploads/2024/10/gratisography-birthday-dog-sunglasses-1036x780.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            transform-origin: 50% 50%;
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+
+        .parallax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            transition: background-color 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        .parallax-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            width: 90%;
+            max-width: 800px;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .main-quote {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .sub-quote {
+            font-size: 1.5rem;
+            font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .main-quote {
+                font-size: 1.8rem;
+            }
+            .sub-quote {
+                font-size: 1.2rem;
+            }
+        }
+        .search-container {
+            position: relative;
+        }
+        .search-input {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        /* Styling for arrows */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 24px;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            }
+            .carousel-arrow.left {
+                left: 10px;
+            }
+            .carousel-arrow.right {
+                right: 10px;
+            }
+            #campaign-carousel::-webkit-scrollbar {
+        display: none;
+    }
+    
+    #campaign-carousel {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    </style>
+</head>
+<body>
+    <header class="fixed top-0 left-0 right-0 bg-gray-900 text-white py-4 z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <!-- Left section with hamburger menu for mobile -->
+                <div class="md:hidden">
+                    <button class="text-white hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Center section with logo -->
+                <div class="flex-1 text-center">
+                    <a href="/" class="text-2xl font-bold inline-block">IITB Crowdfunding</a>
+                </div>
+
+                <!-- Right section with navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <!-- Search bar -->
+                    <div class="search-container">
+                        <input type="text" 
+                               placeholder="Search campaigns..." 
+                               class="search-input px-4 py-1 rounded-full text-sm focus:outline-none">
+                    </div>
+
+                    <!-- Navigation links -->
+                    <a href="/about" class="hover:text-gray-300 transition-colors duration-200">About</a>
+                    <a href="/login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200">Login</a>
+                </nav>
+
+                <!-- Mobile search icon -->
+                <div class="md:hidden">
+                    <button class="text-white hover:text-gray-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile menu (hidden by default) -->
+            <div class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1">
+                    <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">About</a>
+                    <a href="/login" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-700">Login</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="parallax-container">
+        <div class="parallax" id="parallax-bg"></div>
+        <div class="parallax-overlay" id="parallax-overlay"></div>
+        <div class="parallax-text" id="parallax-text">
+            <div class="main-quote">"Every Small Contribution Makes a Big Difference"</div>
+            <div class="sub-quote">Join us in creating meaningful impact</div>
+        </div>
+    </div>
+
+    <main class="container mx-auto my-8 relative">
+        <h2 class="text-2xl font-bold mb-4">Featured Campaigns</h2>
+
+        <!-- Carousel Wrapper with Arrows -->
+        <div class="relative overflow-hidden">
+            <!-- Left Arrow -->
+            <div id="prev" class="carousel-arrow left hidden md:flex items-center justify-center">
+                &#10094;
+            </div>
+
+            <!-- Campaigns Carousel -->
+            <div id="campaign-carousel" class="flex space-x-4 overflow-x-auto snap-x snap-mandatory scroll-smooth">
+                {% for campaign in campaigns %}
+                <div class="flex-none w-72 bg-white shadow-md rounded-lg overflow-hidden snap-start">
+                    <a href="{{ url_for('campaign_page', campaign_id=campaign._id) }}">
+                        <img src="{{ campaign.image }}" alt="{{ campaign.title }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-bold mb-2">{{ campaign.title }}</h3>
+                            <p class="text-gray-600 mb-4">{{ campaign.description }}</p>
+                            
+                            <!-- Progress bar section -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="font-medium">₹{{ campaign.raised }}</span>
+                                    <span class="text-gray-500">of ₹{{ campaign.goal }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-blue-600 h-2.5 rounded-full"
+                                         style="width: {{ (campaign.raised / campaign.goal) * 100 }}%">
+                                    </div>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-blue-600 font-medium">
+                                        {{ ((campaign.raised / campaign.goal) * 100)|round }}% funded
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Right Arrow -->
+            <div id="next" class="carousel-arrow right hidden md:flex items-center justify-center">
+                &#10095;
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 IITB Crowdfunding. Om(24M2127), Prabuddha(24M2124), and Saurbh(24M2132)</p>
+        </div>
+    </footer>
+
+    <script>
+        const campaignsContainer = document.getElementById('campaign-carousel');
+        const nextButton = document.getElementById('next');
+        const prevButton = document.getElementById('prev');
+        const scrollAmount = 300;  // Set the number of pixels to scroll by for each button click
+
+        // Next button click - scrolls right
+        nextButton.addEventListener('click', () => {
+            campaignsContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Previous button click - scrolls left
+        prevButton.addEventListener('click', () => {
+            campaignsContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        // Show/hide arrows based on scroll position
+        function updateArrows() {
+            if (campaignsContainer.scrollLeft === 0) {
+                prevButton.classList.add('hidden');
+            } else {
+                prevButton.classList.remove('hidden');
+            }
+
+            if (campaignsContainer.scrollLeft + campaignsContainer.clientWidth >= campaignsContainer.scrollWidth) {
+                nextButton.classList.add('hidden');
+            } else {
+                nextButton.classList.remove('hidden');
+            }
+        }
+
+        // Check arrow visibility on load and scroll
+        updateArrows();
+        campaignsContainer.addEventListener('scroll', updateArrows);
+    </script>
+    <script>
+        const parallaxBg = document.getElementById('parallax-bg');
+        const parallaxOverlay = document.getElementById('parallax-overlay');
+        const parallaxText = document.getElementById('parallax-text');
+        
+        let isZooming = true;
+        const zoomThreshold = 300; // Adjust this value to control when zooming stops
+        const maxZoom = 1.2; // Maximum zoom level
+        const maxDarkness = 0.5; // Maximum darkness (0 to 1)
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled < zoomThreshold) {
+                // Calculate zoom and darkness factors based on scroll position
+                const progress = scrolled / zoomThreshold;
+                const zoomFactor = 1 + progress * (maxZoom - 1);
+                const darkness = progress * maxDarkness;
+                
+                // Apply zoom transform
+                parallaxBg.style.transform = `scale(${Math.min(zoomFactor, maxZoom)})`;
+                
+                // Apply darkness overlay
+                parallaxOverlay.style.backgroundColor = `rgba(0, 0, 0, ${darkness})`;
+                
+                // Fade in text
+                parallaxText.style.opacity =1- progress;
+                
+                isZooming = true;
+            } else if (isZooming) {
+                // Lock the zoom and darkness at maximum when threshold is reached
+                parallaxBg.style.transform = `scale(${maxZoom})`;
+                parallaxOverlay.style.backgroundColor = `rgba(0, 0, 0, ${maxDarkness})`;
+                parallaxText.style.opacity = 1;
+                isZooming = false;
+            }
+
+            // Regular parallax effect
+            const yPos = -(scrolled * 0.5);
+            if (!isZooming) {
+                parallaxBg.style.transform = `scale(${maxZoom}) translate3d(0, ${yPos}px, 0)`;
+            } else {
+                parallaxBg.style.transform += ` translate3d(0, ${yPos}px, 0)`;
+            }
+        });
+
+        // Reset everything when scrolling back to top
+        window.addEventListener('scrollend', () => {
+            if (window.pageYOffset === 0) {
+                isZooming = true;
+                parallaxBg.style.transform = 'scale(1) translate3d(0, 0, 0)';
+                parallaxOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+                parallaxText.style.opacity = 0;
+            }
+        });
+    </script>
+</body>
+</html>
